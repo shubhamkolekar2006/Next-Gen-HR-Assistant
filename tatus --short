@@ -1,0 +1,169 @@
+[1mdiff --git a/frontend/src/pages/Settings.tsx b/frontend/src/pages/Settings.tsx[m
+[1mindex cafb234..6eb62bb 100644[m
+[1m--- a/frontend/src/pages/Settings.tsx[m
+[1m+++ b/frontend/src/pages/Settings.tsx[m
+[36m@@ -1,45 +1,341 @@[m
+[31m-import { Card, CardContent } from '@/components/ui/card';[m
+[32m+[m[32mimport { useEffect, useMemo, useState } from 'react';[m
+[32m+[m[32mimport { Settings as SettingsIcon, Bell, Shield, Clock, Palette, Save, RotateCcw } from 'lucide-react';[m
+[32m+[m[32mimport { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';[m
+[32m+[m[32mimport { Button } from '@/components/ui/button';[m
+[32m+[m[32mimport { Input } from '@/components/ui/input';[m
+[32m+[m
+[32m+[m[32mtype ThemeOption = 'auto' | 'light' | 'dark';[m
+[32m+[m[32mtype DigestFrequency = 'daily' | 'weekly' | 'monthly';[m
+[32m+[m
+[32m+[m[32mtype AppSettings = {[m
+[32m+[m[32m  emailNotifications: boolean;[m
+[32m+[m[32m  enableSmartAlerts: boolean;[m
+[32m+[m[32m  weeklyDigestFrequency: DigestFrequency;[m
+[32m+[m[32m  workingHoursStart: string;[m
+[32m+[m[32m  workingHoursEnd: string;[m
+[32m+[m[32m  timezone: string;[m
+[32m+[m[32m  theme: ThemeOption;[m
+[32m+[m[32m  dataExportEmail: string;[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32mconst STORAGE_KEY = 'talentflow:settings';[m
+[32m+[m
+[32m+[m[32mconst DEFAULT_SETTINGS: AppSettings = {[m
+[32m+[m[32m  emailNotifications: true,[m
+[32m+[m[32m  enableSmartAlerts: true,[m
+[32m+[m[32m  weeklyDigestFrequency: 'weekly',[m
+[32m+[m[32m  workingHoursStart: '09:00',[m
+[32m+[m[32m  workingHoursEnd: '17:00',[m
+[32m+[m[32m  timezone: 'UTC',[m
+[32m+[m[32m  theme: 'auto',[m
+[32m+[m[32m  dataExportEmail: 'hr@company.com',[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32mconst TIMEZONE_OPTIONS = [[m
+[32m+[m[32m  'UTC',[m
+[32m+[m[32m  'America/New_York',[m
+[32m+[m[32m  'America/Los_Angeles',[m
+[32m+[m[32m  'Europe/London',[m
+[32m+[m[32m  'Europe/Berlin',[m
+[32m+[m[32m  'Asia/Kolkata',[m
+[32m+[m[32m  'Asia/Singapore',[m
+[32m+[m[32m  'Asia/Dubai',[m
+[32m+[m[32m  'Australia/Sydney',[m
+[32m+[m[32m];[m
+[32m+[m
+[32m+[m[32mconst Toggle = ({ checked, onToggle }: { checked: boolean; onToggle: () => void }) => ([m
+[32m+[m[32m  <button[m
+[32m+[m[32m    type="button"[m
+[32m+[m[32m    onClick={onToggle}[m
+[32m+[m[32m    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${[m
+[32m+[m[32m      checked ? 'bg-purple-500' : 'bg-slate-600'[m
+[32m+[m[32m    }`}[m
+[32m+[m[32m  >[m
+[32m+[m[32m    <span[m
+[32m+[m[32m      className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${[m
+[32m+[m[32m        checked ? 'translate-x-5' : 'translate-x-1'[m
+[32m+[m[32m      }`}[m
+[32m+[m[32m    ></span>[m
+[32m+[m[32m  </button>[m
+[32m+[m[32m);[m
+ [m
+ export const Settings = () => {[m
+[31m-  return ([m
+[31m-    <div className="p-6 space-y-6 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen relative overflow-hidden">[m
+[31m-      <div className="absolute inset-0 overflow-hidden pointer-events-none">[m
+[31m-        <div className="absolute top-8 left-1/4 w-96 h-96 bg-violet-500/5 rounded-full blur-3xl animate-pulse"></div>[m
+[31m-        <div className="absolute bottom-0 right-0 w-72 h-72 bg-fuchsia-500/5 rounded-full blur-3xl animate-pulse delay-150"></div>[m
+[31m-      </div>[m
+[32m+[m[32m  const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);[m
+[32m+[m[32m  const [statusMessage, setStatusMessage] = useState<string | null>(null);[m
+[32m+[m[32m  const [statusTone, setStatusTone] = useState<'success' | 'error'>('success');[m
+[32m+[m[32m  const [isSaving, setIsSaving] = useState(false);[m
+ [m
+[31m-      <div className="relative z-10 space-y-6">[m
+[31m-        <div>[m
+[31m-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-violet-400 to-fuchsia-400 bg-clip-text text-transparent">[m
+[31m-            Settings[m
+[31m-          </h1>[m
+[31m-          <p className="text-slate-400 mt-1">[m
+[31m-            Configure preferences to tailor the HR assistant to your workflows.[m
+[31m-          </p>[m
+[31m-        </div>[m
+[32m+[m[32m  useEffect(() => {[m
+[32m+[m[32m    try {[m
+[32m+[m[32m      const stored = localStorage.getItem(STORAGE_KEY);[m
+[32m+[m[32m      if (stored) {[m
+[32m+[m[32m        const parsed = JSON.parse(stored) as Partial<AppSettings>;[m
+[32m+[m[32m        setSettings({ ...DEFAULT_SETTINGS, ...parsed });[m
+[32m+[m[32m      }[m
+[32m+[m[32m    } catch (error) {[m
+[32m+[m[32m      console.error('Failed to load settings', error);[m
+[32m+[m[32m    }[m
+[32m+[m[32m  }, []);[m
+ [m
+[31m-        <Card className="border border-slate-700 bg-slate-800/50 backdrop-blur-xl">[m
+[31m-          <CardContent className="p-6 space-y-4">[m
+[31m-            <div>[m
+[31m-              <h2 className="text-lg font-semibold text-white">General Preferences</h2>[m
+[31m-              <p className="text-sm text-slate-400">[m
+[31m-                Coming soon — personalize notifications, themes, and collaboration options.[m
+[31m-              </p>[m
+[31m-            </div>[m
+[31m-            <div>[m
+[31m-              <h2 className="text-lg font-semibold text-white">Integrations</h2>[m
+[31m-              <p className="text-sm text-slate-400">[m
+[31m-                Connect payroll, ATS, and analytics systems to unlock automation features.[m
+[31m-              </p>[m
+[32m+[m[32m  useEffect(() => {[m
+[32m+[m[32m    if (!statusMessage) return;[m
+[32m+[m[32m    const timeout = window.setTimeout(() => setStatusMessage(null), 4000);[m
+[32m+[m[32m    return () => window.clearTimeout(timeout);[m
+[32m+[m[32m  }, [statusMessage]);[m
+[32m+[m
+[32m+[m[32m  const timezoneLabel = useMemo(() => {[m
+[32m+[m[32m    try {[m
+[32m+[m[32m      const date = new Date();[m
+[32m+[m[32m      return new Intl.DateTimeFormat('en', {[m
+[32m+[m[32m        timeZone: settings.timezone,[m
+[32m+[m[32m        timeStyle: 'short',[m
+[32m+[m[32m      }).format(date);[m
+[32m+[m[32m    } catch (_) {[m
+[32m+[m[32m      return 'Current time unavailable';[m
+[32m+[m[32m    }[m
+[32m+[m[32m  }, [settings.timezone]);[m
+[32m+[m
+[32m+[m[32m  const toggleSetting = (key: 'emailNotifications' | 'enableSmartAlerts') => {[m
+[32m+[m[32m    setSettings((prev) => ({[m
+[32m+[m[32m      ...prev,[m
+[32m+[m[32m      [key]: !prev[key],[m
+[32m+[m[32m    }));[m
+[32m+[m[32m  };[m
+[32m+[m
+[32m+[m[32m  const updateSetting = <Key extends keyof AppSettings>(key: Key, value: AppSettings[Key]) => {[m
+[32m+[m[32m    setSettings((prev) => ({[m
+[32m+[m[32m      ...prev,[m
+[32m+[m[32m      [key]: value,[m
+[32m+[m[32m    }));[m
+[32m+[m[32m  };[m
+[32m+[m
+[32m+[m[32m  const handleSave = () => {[m
+[32m+[m[32m    setIsSaving(true);[m
+[32m+[m[32m    try {[m
+[32m+[m[32m      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));[m
+[32m+[m[32m      setStatusTone('success');[m
+[32m+[m[32m      setStatusMessage('Settings saved successfully.');[m
+[32m+[m[32m    } catch (error) {[m
+[32m+[m[32m      console.error('Failed to save settings', error);[m
+[32m+[m[32m      setStatusTone('error');[m
+[32m+[m[32m      setStatusMessage('Failed to save settings. Please try again.');[m
+[32m+[m[32m    } finally {[m
+[32m+[m[32m      setIsSaving(false);[m
+[32m+[m[32m    }[m
+[32m+[m[32m  };[m
+[32m+[m
+[32m+[m[32m  const handleReset = () => {[m
+[32m+[m[32m    setSettings(DEFAULT_SETTINGS);[m
+[32m+[m[32m    setStatusTone('success');[m
+[32m+[m[32m    setStatusMessage('Settings restored to defaults.');[m
+[32m+[m[32m  };[m
+[32m+[m
+[32m+[m[32m  return ([m
+[32m+[m[32m    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">[m
+[32m+[m[32m      <div className="mx-auto max-w-5xl 

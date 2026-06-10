@@ -1,0 +1,388 @@
+{
+  "generated_at": "2026-05-15T10:06:32.398594+00:00",
+  "overall": {
+    "total_runs": 12,
+    "successful_runs": 12,
+    "failed_runs": 0,
+    "success_rate_pct": 100.0,
+    "avg_latency_ms": 444.0,
+    "p95_latency_ms": 563.0,
+    "avg_tool_calls_per_run": 3.17,
+    "avg_reasoning_steps_per_run": 2.0
+  },
+  "token_usage": {
+    "total_input_tokens": 7376,
+    "total_output_tokens": 3176,
+    "avg_tokens_per_run": 879.3
+  },
+  "per_tool": {
+    "send_email": {
+      "total_calls": 6,
+      "success_rate_pct": 83.3,
+      "avg_latency_ms": 83.17,
+      "max_latency_ms": 125.0,
+      "recent_errors": [
+        "Timeout"
+      ]
+    },
+    "generate_offer_letter": {
+      "total_calls": 7,
+      "success_rate_pct": 100.0,
+      "avg_latency_ms": 67.0,
+      "max_latency_ms": 109.0,
+      "recent_errors": []
+    },
+    "execute_mongo_query": {
+      "total_calls": 5,
+      "success_rate_pct": 100.0,
+      "avg_latency_ms": 87.4,
+      "max_latency_ms": 109.0,
+      "recent_errors": []
+    },
+    "schedule_interview": {
+      "total_calls": 4,
+      "success_rate_pct": 100.0,
+      "avg_latency_ms": 89.5,
+      "max_latency_ms": 94.0,
+      "recent_errors": []
+    },
+    "schedule_meeting": {
+      "total_calls": 7,
+      "success_rate_pct": 85.7,
+      "avg_latency_ms": 80.43,
+      "max_latency_ms": 125.0,
+      "recent_errors": [
+        "Timeout"
+      ]
+    },
+    "screen_resume": {
+      "total_calls": 5,
+      "success_rate_pct": 60.0,
+      "avg_latency_ms": 59.4,
+      "max_latency_ms": 94.0,
+      "recent_errors": [
+        "Timeout",
+        "Timeout"
+      ]
+    },
+    "onboard_employee": {
+      "total_calls": 4,
+      "success_rate_pct": 100.0,
+      "avg_latency_ms": 74.25,
+      "max_latency_ms": 109.0,
+      "recent_errors": []
+    }
+  },
+  "_runs": [
+    {
+      "run_id": "thread-0",
+      "latency_ms": 375.0,
+      "success": true,
+      "input_tokens": 833,
+      "output_tokens": 202,
+      "tool_calls": [
+        {
+          "tool_name": "send_email",
+          "latency_ms": 125.0,
+          "success": true
+        },
+        {
+          "tool_name": "generate_offer_letter",
+          "latency_ms": 31.0,
+          "success": true
+        },
+        {
+          "tool_name": "execute_mongo_query",
+          "latency_ms": 109.0,
+          "success": true
+        }
+      ],
+      "reasoning_steps": 3
+    },
+    {
+      "run_id": "thread-1",
+      "latency_ms": 563.0,
+      "success": true,
+      "input_tokens": 648,
+      "output_tokens": 187,
+      "tool_calls": [
+        {
+          "tool_name": "schedule_interview",
+          "latency_ms": 93.0,
+          "success": true
+        },
+        {
+          "tool_name": "schedule_meeting",
+          "latency_ms": 32.0,
+          "success": true
+        },
+        {
+          "tool_name": "screen_resume",
+          "latency_ms": 31.0,
+          "success": false
+        },
+        {
+          "tool_name": "onboard_employee",
+          "latency_ms": 94.0,
+          "success": true
+        }
+      ],
+      "reasoning_steps": 1
+    },
+    {
+      "run_id": "thread-2",
+      "latency_ms": 484.0,
+      "success": true,
+      "input_tokens": 397,
+      "output_tokens": 344,
+      "tool_calls": [
+        {
+          "tool_name": "screen_resume",
+          "latency_ms": 94.0,
+          "success": false
+        },
+        {
+          "tool_name": "execute_mongo_query",
+          "latency_ms": 94.0,
+          "success": true
+        },
+        {
+          "tool_name": "send_email",
+          "latency_ms": 78.0,
+          "success": true
+        },
+        {
+          "tool_name": "schedule_interview",
+          "latency_ms": 78.0,
+          "success": true
+        }
+      ],
+      "reasoning_steps": 1
+    },
+    {
+      "run_id": "thread-3",
+      "latency_ms": 391.0,
+      "success": true,
+      "input_tokens": 855,
+      "output_tokens": 447,
+      "tool_calls": [
+        {
+          "tool_name": "send_email",
+          "latency_ms": 47.0,
+          "success": false
+        },
+        {
+          "tool_name": "schedule_meeting",
+          "latency_ms": 125.0,
+          "success": true
+        },
+        {
+          "tool_name": "generate_offer_letter",
+          "latency_ms": 94.0,
+          "success": true
+        }
+      ],
+      "reasoning_steps": 2
+    },
+    {
+      "run_id": "thread-4",
+      "latency_ms": 484.0,
+      "success": true,
+      "input_tokens": 635,
+      "output_tokens": 141,
+      "tool_calls": [
+        {
+          "tool_name": "onboard_employee",
+          "latency_ms": 63.0,
+          "success": true
+        },
+        {
+          "tool_name": "generate_offer_letter",
+          "latency_ms": 47.0,
+          "success": true
+        },
+        {
+          "tool_name": "schedule_meeting",
+          "latency_ms": 109.0,
+          "success": false
+        }
+      ],
+      "reasoning_steps": 3
+    },
+    {
+      "run_id": "thread-5",
+      "latency_ms": 391.0,
+      "success": true,
+      "input_tokens": 518,
+      "output_tokens": 274,
+      "tool_calls": [
+        {
+          "tool_name": "schedule_meeting",
+          "latency_ms": 125.0,
+          "success": true
+        },
+        {
+          "tool_name": "send_email",
+          "latency_ms": 78.0,
+          "success": true
+        }
+      ],
+      "reasoning_steps": 3
+    },
+    {
+      "run_id": "thread-6",
+      "latency_ms": 312.0,
+      "success": true,
+      "input_tokens": 599,
+      "output_tokens": 293,
+      "tool_calls": [
+        {
+          "tool_name": "schedule_interview",
+          "latency_ms": 94.0,
+          "success": true
+        },
+        {
+          "tool_name": "onboard_employee",
+          "latency_ms": 31.0,
+          "success": true
+        }
+      ],
+      "reasoning_steps": 1
+    },
+    {
+      "run_id": "thread-7",
+      "latency_ms": 406.0,
+      "success": true,
+      "input_tokens": 755,
+      "output_tokens": 140,
+      "tool_calls": [
+        {
+          "tool_name": "execute_mongo_query",
+          "latency_ms": 78.0,
+          "success": true
+        },
+        {
+          "tool_name": "generate_offer_letter",
+          "latency_ms": 109.0,
+          "success": true
+        }
+      ],
+      "reasoning_steps": 1
+    },
+    {
+      "run_id": "thread-8",
+      "latency_ms": 516.0,
+      "success": true,
+      "input_tokens": 389,
+      "output_tokens": 414,
+      "tool_calls": [
+        {
+          "tool_name": "screen_resume",
+          "latency_ms": 47.0,
+          "success": true
+        },
+        {
+          "tool_name": "schedule_interview",
+          "latency_ms": 93.0,
+          "success": true
+        },
+        {
+          "tool_name": "execute_mongo_query",
+          "latency_ms": 94.0,
+          "success": true
+        }
+      ],
+      "reasoning_steps": 3
+    },
+    {
+      "run_id": "thread-9",
+      "latency_ms": 547.0,
+      "success": true,
+      "input_tokens": 561,
+      "output_tokens": 244,
+      "tool_calls": [
+        {
+          "tool_name": "onboard_employee",
+          "latency_ms": 109.0,
+          "success": true
+        },
+        {
+          "tool_name": "schedule_meeting",
+          "latency_ms": 47.0,
+          "success": true
+        },
+        {
+          "tool_name": "generate_offer_letter",
+          "latency_ms": 32.0,
+          "success": true
+        },
+        {
+          "tool_name": "send_email",
+          "latency_ms": 109.0,
+          "success": true
+        }
+      ],
+      "reasoning_steps": 1
+    },
+    {
+      "run_id": "thread-10",
+      "latency_ms": 453.0,
+      "success": true,
+      "input_tokens": 846,
+      "output_tokens": 225,
+      "tool_calls": [
+        {
+          "tool_name": "generate_offer_letter",
+          "latency_ms": 109.0,
+          "success": true
+        },
+        {
+          "tool_name": "send_email",
+          "latency_ms": 62.0,
+          "success": true
+        },
+        {
+          "tool_name": "schedule_meeting",
+          "latency_ms": 94.0,
+          "success": true
+        },
+        {
+          "tool_name": "screen_resume",
+          "latency_ms": 47.0,
+          "success": true
+        }
+      ],
+      "reasoning_steps": 3
+    },
+    {
+      "run_id": "thread-11",
+      "latency_ms": 406.0,
+      "success": true,
+      "input_tokens": 340,
+      "output_tokens": 265,
+      "tool_calls": [
+        {
+          "tool_name": "screen_resume",
+          "latency_ms": 78.0,
+          "success": true
+        },
+        {
+          "tool_name": "schedule_meeting",
+          "latency_ms": 31.0,
+          "success": true
+        },
+        {
+          "tool_name": "generate_offer_letter",
+          "latency_ms": 47.0,
+          "success": true
+        },
+        {
+          "tool_name": "execute_mongo_query",
+          "latency_ms": 62.0,
+          "success": true
+        }
+      ],
+      "reasoning_steps": 2
+    }
+  ]
+}
